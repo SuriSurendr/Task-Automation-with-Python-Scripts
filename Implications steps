@@ -1,0 +1,63 @@
+import os
+import shutil
+
+def organize_files(directory="."):
+    """
+    Organizes files in the specified directory by their extensions.
+    Creates subdirectories for each file type and moves files accordingly.
+    """
+    # Dictionary mapping extensions to folder names
+    extension_folders = {
+        'jpg': 'Images',
+        'jpeg': 'Images',
+        'png': 'Images',
+        'gif': 'Images',
+        'pdf': 'Documents',
+        'txt': 'Documents',
+        'docx': 'Documents',
+        'xlsx': 'Documents',
+        'csv': 'Data',
+        'json': 'Data',
+        'mp3': 'Audio',
+        'wav': 'Audio',
+        'mp4': 'Videos',
+        'mov': 'Videos',
+        'zip': 'Archives',
+        'exe': 'Programs',
+        'py': 'Python Scripts'
+    }
+
+    # Get all files in the directory
+    files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
+
+    for file in files:
+        # Get file extension
+        _, ext = os.path.splitext(file)
+        ext = ext[1:].lower()  # Remove dot and convert to lowercase
+
+        # Skip if no extension or file is our script
+        if not ext or file == os.path.basename(__file__):
+            continue
+
+        # Get folder name from dictionary or use 'Other'
+        folder = extension_folders.get(ext, 'Other')
+
+        # Create folder if it doesn't exist
+        folder_path = os.path.join(directory, folder)
+        os.makedirs(folder_path, exist_ok=True)
+
+        # Move file to the appropriate folder
+        src = os.path.join(directory, file)
+        dst = os.path.join(folder_path, file)
+        
+        try:
+            shutil.move(src, dst)
+            print(f"Moved {file} to {folder}/")
+        except Exception as e:
+            print(f"Error moving {file}: {e}")
+
+if __name__ == "__main__":
+    print("File Organizer Script")
+    path = input("Enter directory path to organize (press Enter for current directory): ") or "."
+    organize_files(path)
+    print("Organization complete!")
