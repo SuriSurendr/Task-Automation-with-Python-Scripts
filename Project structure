@@ -1,0 +1,6 @@
+file-organizer/
+├── .gitignore
+├── README.md
+├── organizer.py
+├── requirements.txt
+└── report.md
